@@ -26,7 +26,7 @@ const DetailOrder = ({ route, navigation }) => {
     const [findDriver, setfindDriver] = useState(false);
 
     const getRider = useCallback(async () => {
-        if(!findDriver) {
+        if (!findDriver) {
             try {
                 await getData(`order/GetRider/${idInvoice}`);
             } catch (error) {
@@ -122,32 +122,34 @@ const DetailOrder = ({ route, navigation }) => {
     return (
         <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
             <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-            <MapView
-                ref={mapRef}
-                style={styles.map}
-                pitch={30}
-                region={{
-                    latitude: pickupLocation?.latitude || -6.2067,
-                    longitude: pickupLocation?.longitude || 106.7161,
-                    latitudeDelta: 0.015,
-                    longitudeDelta: 0.0121,
-                }}
-            >
-                {pickupLocation && <Marker coordinate={pickupLocation} pinColor="red" title="Origin" />}
-                {destinationLocation && (
-                    <Marker coordinate={destinationLocation} pinColor="green" title="Origin" />
-                )}
-                {status > 0 && driverLocation && (
-                    <Marker coordinate={driverLocation} anchor={{ x: 0.5, y: 0.5 }}>
-                        <View style={[styles.markerContainer, { backgroundColor: 'green' }]}>
-                            <Image source={require("../../../assets/logo.png")} style={styles.markerImage} />
-                        </View>
-                    </Marker>
-                )}
-                {coordinates.length > 0 && (
-                    <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
-                )}
-            </MapView>
+            {status <= 2 &&
+                <MapView
+                    ref={mapRef}
+                    style={styles.map}
+                    pitch={30}
+                    region={{
+                        latitude: pickupLocation?.latitude || -6.2067,
+                        longitude: pickupLocation?.longitude || 106.7161,
+                        latitudeDelta: 0.015,
+                        longitudeDelta: 0.0121,
+                    }}
+                >
+                    {pickupLocation && <Marker coordinate={pickupLocation} pinColor="red" title="Origin" />}
+                    {destinationLocation && (
+                        <Marker coordinate={destinationLocation} pinColor="green" title="Origin" />
+                    )}
+                    {status > 0 && driverLocation && (
+                        <Marker coordinate={driverLocation} anchor={{ x: 0.5, y: 0.5 }}>
+                            <View style={[styles.markerContainer, { backgroundColor: 'green' }]}>
+                                <Image source={require("../../../assets/logo.png")} style={styles.markerImage} />
+                            </View>
+                        </Marker>
+                    )}
+                    {coordinates.length > 0 && (
+                        <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
+                    )}
+                </MapView>
+            }
 
             {mencariDriver && (
                 <>
