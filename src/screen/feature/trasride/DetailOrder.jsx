@@ -25,6 +25,16 @@ const DetailOrder = ({ route, navigation }) => {
     const [mencariDriver, setMencariDriver] = useState(false);
     const [findDriver, setfindDriver] = useState(false);
 
+    const getRider = useCallback(async () => {
+        if(!findDriver) {
+            try {
+                await getData(`order/GetRider/${idInvoice}`);
+            } catch (error) {
+                console.error("Error fetching order details:", error);
+            }
+        }
+    }, [idInvoice]);
+
     // Fungsi untuk mengambil data pesanan
     const getProfileUser = useCallback(async () => {
         try {
@@ -32,7 +42,6 @@ const DetailOrder = ({ route, navigation }) => {
             if (!isMounted.current) return;
 
             setData(response);
-            console.log(response)
             setStatus(response?.data?.status || 0);
             setDriverLocation(response?.locationDriver || null);
             setPickupLocation(response?.data?.pickupLocation || null);
@@ -49,6 +58,7 @@ const DetailOrder = ({ route, navigation }) => {
 
             if (response.data.status === 0) {
                 setfindDriver(false)
+                getRider();
             }
 
 
@@ -86,15 +96,12 @@ const DetailOrder = ({ route, navigation }) => {
         }
     }, [idInvoice, navigation]);
 
-    // useEffect untuk mengambil data awal dan polling setiap 10 detik
     useEffect(() => {
         isMounted.current = true;
         getProfileUser();
-
         const intervalId = setInterval(() => {
             getProfileUser();
         }, 10000);
-
         return () => {
             isMounted.current = false;
             clearInterval(intervalId);

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, Image } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, Image, Alert } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import { Motion } from "@legendapp/motion"
-import { ButtonComponent, ButtonSecondaryComponent } from './ButtonComponent';
+import { ButtonComponent, ButtonSecondaryComponent, ButtonThirdComponent } from './ButtonComponent';
 import { useTranslation } from 'react-i18next';
 import RadioButtonGroup from './RadioButtonComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import dayjs from 'dayjs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,6 +54,36 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
     }, 200); // 0.5 seconds delay
     return () => clearTimeout(timer);
   }
+
+  const [countdown, setCountdown] = useState(360);
+  const [showThirdButton, setShowThirdButton] = useState(true);
+
+  useEffect(() => {
+    const now = dayjs();
+    const diff = now.diff(data.data.updatedAt, 'second');
+    const initialCountdown = 360 - diff;
+
+    if (initialCountdown <= 0) {
+      setShowThirdButton(false);
+      setCountdown(0);
+      return;
+    }
+
+    setCountdown(initialCountdown);
+
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setShowThirdButton(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <View style={styles.modalContainer}>
@@ -129,10 +160,44 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
           {status === 1 &&
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <View style={{ flex: 1 }}>
-                <ButtonSecondaryComponent
-                  title={t('button.batal')}
-                  onPress={() => actions()}
-                />
+                {showThirdButton ? (
+                  <>
+                    <Text style={{ textAlign: 'center', marginBottom: 10 }}>
+                      {countdown} detik lagi pesanan tidak bisa di batalkan
+                    </Text>
+                    <ButtonThirdComponent
+                      title="Batal"
+                      onPress={() =>
+                        Alert.alert(
+                          'Membatalkan Pesanan?',
+                          'Driver dalam perjalanan, apakah kamu yakin ingin membatalkan pesanan ini?',
+                          [
+                            {
+                              text: 'Tidak',
+                              onPress: () => console.log('User membatalkan aksi'),
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'Setuju',
+                              onPress: () => actions(),
+                            },
+                          ],
+                          { cancelable: false }
+                        )
+                      }
+                    />
+                  </>
+                ) : (
+                  <ButtonSecondaryComponent
+                    title="Batal"
+                    onPress={() =>
+                      Alert.alert(
+                        'Membatalkan Pesanan?',
+                        'Kamu tidak bisa membatalkan karena driver sudah dalam perjalanan'
+                      )
+                    }
+                  />
+                )}
               </View>
             </View>
           }

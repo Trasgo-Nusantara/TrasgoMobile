@@ -11,7 +11,7 @@ const LoadingSearchComponent = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
           setToggleValue(prevValue => (prevValue === 1 ? 0 : 1)); // Toggle between 1 and 0
-        }, 240); // 30ms interval
+        }, 2000); // 30ms interval
     
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
@@ -26,7 +26,8 @@ const LoadingSearchComponent = () => {
             style={styles.modalAnimateCenter}
         >
             <View>
-                <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Sedang Menghubungi Driver</Text>
+                <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Mencari Driver</Text>
+                    <View style={COMPONENT_STYLES.spacer} />
                 <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Mohon untuk tidak meninggalkan layar ini selama proses berlangsung</Text>
             </View>
         </Motion.View >
