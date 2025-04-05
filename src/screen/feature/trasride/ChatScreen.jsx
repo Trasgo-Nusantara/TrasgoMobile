@@ -104,6 +104,7 @@ const ChatScreen = ({ route }) => {
   };
 
   const takePhoto = () => {
+    console.log()
     launchCamera({ mediaType: 'photo' }, (response) => {
       if (response.assets && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);

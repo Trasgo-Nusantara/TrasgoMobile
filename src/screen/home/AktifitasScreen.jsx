@@ -29,7 +29,7 @@ const AktifitasScreen = ({ navigation }) => {
   const getProfileUser = async () => {
     try {
       const response = await getData('order/GetOrder');
-      const filtered = response.data.filter((a)=> a.status <= 3)
+      const filtered = response.data.filter((a)=> a.status <= 2)
       const sortedData = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setdata(sortedData)
     } catch (error) {

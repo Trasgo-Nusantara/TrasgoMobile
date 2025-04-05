@@ -213,7 +213,7 @@ const MainNavigator = () => {
   const getProfileUser = async () => {
       try {
         const response = await getData('order/GetOrder');
-        const filtered = response.data.filter((a)=> a.status <= 3)
+        const filtered = response.data.filter((a)=> a.status <= 2)
         setdata(filtered.length)
       } catch (error) {
         console.error(error);

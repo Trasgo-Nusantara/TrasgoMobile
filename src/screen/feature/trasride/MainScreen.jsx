@@ -12,6 +12,7 @@ import { LoadingSearchComponent } from './component/LoadingSearchComponent';
 import ModalDriver from '../../../component/ModaDriver';
 import ModalInfo from '../../../component/ModalInfo';
 import { postData } from '../../../api/service';
+import Geolocation from '@react-native-community/geolocation';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,9 +21,10 @@ const TrasrideScreen = ({ navigation }) => {
     const mapRef = useRef(null);
 
     const [pickupLocation, setPickupLocation] = useState({
-        latitude: 0,
-        longitude: 0,
+        latitude: null,
+        longitude: null,
     });
+
     const [destinationLocation, setDestinationLocation] = useState({
         latitude: 0,
         longitude: 0,
@@ -76,25 +78,6 @@ const TrasrideScreen = ({ navigation }) => {
     const [initialSearch, setinitialSearch] = useState(false);
 
     const bookingNow = async () => {
-        // const paddingMap = { top: 100, right: 100, bottom: 200, left: 100 }; // Adjust padding as needed
-        // mapRef.current.fitToCoordinates(
-        //     [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }].filter(Boolean),
-        //     {
-        //         edgePadding: paddingMap, // Set padding for map zoom level
-        //         animated: true, // Animate the map transition
-        //     }
-        // );
-        // setTimeout(() => {
-        //     mapRef.current.fitToCoordinates([pickupLocation, driverLocation].filter(Boolean), {
-        //         edgePadding: paddingMap,
-        //         animated: true,
-        //     });
-        //     setmodalSearchBarShow(true)
-        //     setrideModal(false)
-        //     setmencariDriver(false)
-        //     setfindDriver(true)
-        // }, 2000);
-
         const formData2 = {
             originLat: pickupLocation.latitude,
             originLon: pickupLocation.longitude,
@@ -102,7 +85,6 @@ const TrasrideScreen = ({ navigation }) => {
             destinationLon: destinationLocation.longitude,
         };
         try {
-            console.log(coordinates)
             const responseFinal = await postData('maps/getDirections', formData2);
             const formData = {
                 "createdAt": new Date().toISOString(),
@@ -138,12 +120,12 @@ const TrasrideScreen = ({ navigation }) => {
             try {
                 const response = await postData('order/ride', formData);
                 navigation.reset({
-                    index: 1, // Indeks screen tujuan
+                    index: 1,
                     routes: [
-                      { name: "Home" }, // Screen pertama di stack
-                      { name: "DetailOrder", params: { idInvoice: response.idOrder } } // Screen aktif
+                        { name: "Home" },
+                        { name: "DetailOrder", params: { idInvoice: response.idOrder } } // Screen aktif
                     ],
-                  });
+                });
             } catch (error) {
 
             }
@@ -160,12 +142,12 @@ const TrasrideScreen = ({ navigation }) => {
         setmencariDriver(false)
         setfindDriver(false)
         setmodalCancel(false)
-        const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 }; // Adjust padding as needed
+        const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
         mapRef.current.fitToCoordinates(
             [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }, destinationLocation].filter(Boolean),
             {
-                edgePadding: paddingMap, // Set padding for map zoom level
-                animated: true, // Animate the map transition
+                edgePadding: paddingMap,
+                animated: true,
             }
         );
     }
@@ -219,6 +201,7 @@ const TrasrideScreen = ({ navigation }) => {
             setLoading(false);
         }
     };
+
     const buttonDestination = async (a) => {
         const formData = {
             nameSearch: a.placeId
@@ -259,48 +242,65 @@ const TrasrideScreen = ({ navigation }) => {
         }
     };
 
+    useEffect(() => {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setPickupLocation({ latitude, longitude });
+            },
+            (error) => {
+                console.log("Error getting location", error);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    }, []);
+
     return (
         <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
             <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-            <MapView
-                ref={mapRef}
-                // provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                region={{
-                    latitude: pickupLocation.latitude,
-                    longitude: pickupLocation.longitude,
-                    latitudeDelta: 0.015,
-                    longitudeDelta: 0.0121,
-                }}
-                onUserLocationChange={handleUserLocationChange}
-                onRegionChangeComplete={(data) => {
-                    if (searchLocationonMapMode) {
-                        if (focus === "origin") {
-                            setPickupLocation({
-                                latitude: data.latitude,
-                                longitude: data.longitude,
-                            })
-                        } else {
-                            setDestinationLocation({
-                                latitude: data.latitude,
-                                longitude: data.longitude,
-                            })
+            {pickupLocation && pickupLocation.latitude && pickupLocation.longitude ? (
+                <MapView
+                    ref={mapRef}
+                    // provider={PROVIDER_GOOGLE}
+                    style={styles.map}
+                    region={{
+                        latitude: pickupLocation.latitude,
+                        longitude: pickupLocation.longitude,
+                        latitudeDelta: 0.015,
+                        longitudeDelta: 0.0121,
+                    }}
+                    onUserLocationChange={handleUserLocationChange}
+                    onRegionChangeComplete={(data) => {
+                        if (searchLocationonMapMode) {
+                            if (focus === "origin") {
+                                setPickupLocation({
+                                    latitude: data.latitude,
+                                    longitude: data.longitude,
+                                })
+                            } else {
+                                setDestinationLocation({
+                                    latitude: data.latitude,
+                                    longitude: data.longitude,
+                                })
+                            }
                         }
+                    }}
+                    // onPress={handleMapPress}
+                    showsUserLocation={true}
+                >
+                    <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
+                    <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
+                    <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
+                    {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
+                        <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
                     }
-                }}
-                // onPress={handleMapPress}
-                showsUserLocation={true}
-            >
-                <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
-                <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
-                <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
-                {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
-                    <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
-                }
-                {findDriver &&
-                    <Marker coordinate={driverLocation} pinColor='blue' title='Driver' />
-                }
-            </MapView>
+                    {findDriver &&
+                        <Marker coordinate={driverLocation} pinColor='blue' title='Driver' />
+                    }
+                </MapView>
+            ) : (
+                <Text>Memuat lokasi...</Text>
+            )}
             {searchLocationonMapMode && (
                 <View style={styles.centerCircle} />
             )}

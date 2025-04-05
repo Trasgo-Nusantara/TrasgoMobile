@@ -23,21 +23,7 @@ const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
         >
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ width: 50, height: 40 }}>
-              {option.icon === '1' &&
-                <Image source={require("../assets/trasride/motor.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
-              }
-              {option.icon === '2' &&
-                <Image source={require("../assets/trasride/motorxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
-              }
-              {option.icon === '3' &&
-                <Image source={require("../assets/trasride/mobil.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
-              }
-              {option.icon === '4' &&
-                <Image source={require("../assets/trasride/mobilxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
-              }
-              {option.icon === '5' &&
-                <Image source={require("../assets/trasride/mobilxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
-              }
+              <Image source={{uri: option.icon}} style={[styles.icon, { width: '100%', height: '100%' }]} />
             </View>
             <View style={COMPONENT_STYLES.spacer} />
             <View>
@@ -90,7 +76,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   icon: {
-    resizeMode: 'stretch'
   }
 });
 

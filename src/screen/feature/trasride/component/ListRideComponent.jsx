@@ -11,16 +11,14 @@ import { ButtonComponent } from "../../../../component/ButtonComponent";
 const ModalRideComponent = ({
     modalRideShow,
     setmodalRideShow,
-
     options,
     selectedValue,
     setSelectedValue
- }) => {
+}) => {
 
     const { t } = useTranslation();
 
     useEffect(() => {
-        console.log(options)
         if (modalRideShow) {
             const timer = setTimeout(() => {
                 setmodalRideShow(true);
@@ -60,7 +58,7 @@ const ModalRideComponent = ({
     const handleSelect = (option) => {
         setSelectedValue(option);
         setmodalRideShow(false)
-      };
+    };
 
     return (
         <Motion.View
@@ -76,7 +74,14 @@ const ModalRideComponent = ({
                 <View style={{ alignItems: 'center', margin: 10 }}>
                     <View style={{ width: 50, height: 3, backgroundColor: '#00000050' }} />
                 </View>
-                <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>{t('modalChoice.PilihKendaraan')}</Text>
+                <View style={{flexDirection:'row', justifyContent:"center", alignItems:"center"}}>
+                    <TouchableOpacity>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Mobil</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Motor</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={COMPONENT_STYLES.spacer} />
                 <RadioButtonChoiceGroup
                     options={options}
