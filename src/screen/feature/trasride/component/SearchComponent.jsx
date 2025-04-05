@@ -54,7 +54,7 @@ const ModalSearch = ({
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={COMPONENT_STYLES.spacer} />
                 {selectedValueTitleDes !== '' &&
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <><View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ flex: 1 }}>
                             <DropdownSearchComponent
                                 trigger={(a) => buttonOrigin(a)}
@@ -67,14 +67,12 @@ const ModalSearch = ({
                                 focus={'origin'}
                                 onValueChange={setoriginChoice}
                                 setlocationStatus={setlocationStatus}
-
-                                selectedValue={selectedValueTitleOrigin} 
-                                setselectedValue={setselectedValueTitleOrigin}
-                            />
+                                ////set nama lokasi ke main
+                                selectedValue={selectedValueTitleOrigin}
+                                setselectedValue={setselectedValueTitleOrigin} />
                         </View>
-                    </View>
+                    </View><View style={COMPONENT_STYLES.spacer} /></>
                 }
-                <View style={COMPONENT_STYLES.spacer} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <DropdownSearchComponent
@@ -87,7 +85,7 @@ const ModalSearch = ({
                             focus={'destination'}
                             onValueChange={setdestinationChoice}
                             setlocationStatus={setlocationStatus}
-
+                            ///set nama lokasi ke main
                             selectedValue={selectedValueTitleDes} 
                             setselectedValue={setselectedValueTitleDes}
                         />

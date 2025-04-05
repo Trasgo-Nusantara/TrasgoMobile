@@ -26,7 +26,8 @@ const LoadingSearchComponent = () => {
             style={styles.modalAnimateCenter}
         >
             <View>
-                <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Sedang Mencari Driver Terdekat</Text>
+                <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Sedang Menghubungi Driver</Text>
+                <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center', color: 'white' }]}>Mohon untuk tidak meninggalkan layar ini selama proses berlangsung</Text>
             </View>
         </Motion.View >
     )

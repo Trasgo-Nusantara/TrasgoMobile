@@ -198,7 +198,7 @@ const HomeStack = () => {
             headerShadowVisible: false,
             headerLeft: () => (
               <View>
-                <Ionicons name="person-outline" size={24} color="black" style={{ marginRight: 20 }} />
+                <Ionicons name="chevron-back-outline" size={24} color="black" style={{ marginRight: 20 }} />
               </View>
             ),
           })} />

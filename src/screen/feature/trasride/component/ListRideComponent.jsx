@@ -4,6 +4,10 @@ import { COLORS, COMPONENT_STYLES } from "../../../../lib/constants"
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
 import { useTranslation } from "react-i18next";
 import RadioButtonChoiceGroup from '../../../../component/RadioButtonChoiceComponent';
+import TextInputComponent from '../../../../component/TextInputComponent';
+import { ButtonComponent, ButtonThirdComponent } from '../../../../component/ButtonComponent';
+import TextInputStandardComponent from '../../../../component/TextInputStandardComponent';
+
 
 
 const ModalRideComponent = ({
@@ -19,6 +23,17 @@ const ModalRideComponent = ({
 
     const { t } = useTranslation();
     const [choice, setchoice] = useState("regular")
+    const [kodeDriver, setkodeDriver] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setloading] = useState(false);
+
+    const handleLoginPress = async () => {
+        if (!phone) {
+          setError("");
+        } else {
+          setError('');
+        }
+      };
 
     useEffect(() => {
         if (modalRideShow) {
@@ -96,13 +111,22 @@ const ModalRideComponent = ({
                     </TouchableOpacity>
                     <View style={{ width: 5, height: 5, backgroundColor: COLORS.primary, borderRadius: 100, marginHorizontal: 10 }} />
                     <TouchableOpacity onPress={() => setchoice('premium')}>
-                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Periority</Text>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Perioritas</Text>
                         {choice === 'premium' &&
                             <View style={{ alignItems: 'center' }}>
                                 <View style={{ width: 50, height: 3, backgroundColor: COLORS.primary }} />
                             </View>
                         }
                     </TouchableOpacity>
+                    {/* <View style={{ width: 5, height: 5, backgroundColor: COLORS.primary, borderRadius: 100, marginHorizontal: 10 }} />
+                    <TouchableOpacity onPress={() => setchoice('instant')}>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Instant</Text>
+                        {choice === 'instant' &&
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={{ width: 50, height: 3, backgroundColor: COLORS.primary }} />
+                            </View>
+                        }
+                    </TouchableOpacity> */}
                 </View>
                 <View style={COMPONENT_STYLES.spacer} />
                 {choice === 'regular' &&
@@ -125,6 +149,31 @@ const ModalRideComponent = ({
                         selectedValue={selectedValue}
                         onSelect={handleSelect}
                     />
+                }
+                {choice === 'instant' &&
+                    <View style={{ flex: 1 }} >
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600' }]}>Kode Driver</Text>
+                        <TextInputStandardComponent
+                            // label={t('loginScreen.phoneLabel')}
+                            placeholder={"Masukkan Kode Driver"}
+                            value={kodeDriver}
+                            onChangeText={setkodeDriver}
+                            keyboardType="phone-pad"
+                            errorMessage={error}
+                        />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <View style={COMPONENT_STYLES.spacer} />
+                        <ButtonThirdComponent
+                            title={"Cari Driver"}
+                            onPress={handleLoginPress}
+                            isLoading={loading}
+                        />
+                    </View>
                 }
             </View>
         </Motion.View>

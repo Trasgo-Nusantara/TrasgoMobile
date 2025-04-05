@@ -44,15 +44,16 @@ const AkunScreen = ({ navigation }) => {
     {
       name: t('menuAkun.profile'),
       iconName: "person-circle-outline",
+        action: () => navigation.navigate('UpdateProfile')
     },
-    {
-      name: t('menuAkun.referal'),
-      iconName: "people-circle-outline"
-    },
-    {
-      name: t('menuAkun.alamat'),
-      iconName: "map-outline"
-    },
+    // {
+    //   name: t('menuAkun.referal'),
+    //   iconName: "people-circle-outline",
+    // },
+    // {
+    //   name: t('menuAkun.alamat'),
+    //   iconName: "map-outline"
+    // },
     {
       name: t('menuAkun.term'),
       iconName: "newspaper-outline"

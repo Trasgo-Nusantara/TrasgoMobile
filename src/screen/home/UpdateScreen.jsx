@@ -7,8 +7,7 @@ import { ButtonComponent } from '../../component/ButtonComponent';
 import TextInputStandardComponent from '../../component/TextInputStandardComponent';
 import DropdownFlagComponent from '../../component/DropdownFlagComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getData } from '../../lib/transFunctions';
-import { postData } from '../../api/service';
+import { postData, getData } from '../../api/service';
 import ModalWarning from '../../component/ModalWaring';
 
 const { width } = Dimensions.get('window');
@@ -79,6 +78,22 @@ const UpdateScreen = ({navigation}) => {
     }));
   };
 
+  const getProfileUser = async () => {
+      try {
+        const response = await getData('auth/verifySessions');
+        setForm({
+          'fullName': response.data.fullName,
+          'email': response.data.email,
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+   useEffect(() => {
+      getProfileUser();
+    }, []);
+
   return (
     <View style={COMPONENT_STYLES.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
@@ -111,7 +126,7 @@ const UpdateScreen = ({navigation}) => {
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
         <ButtonComponent
-          title={t('button.simpan')}
+          title={"Simpan"}
           onPress={handlePress}
         />
         <View style={COMPONENT_STYLES.spacer} />

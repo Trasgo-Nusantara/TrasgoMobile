@@ -12,7 +12,7 @@ import { Image, View } from 'react-native';
 const AppNavigator = () => {
 
   const [isLoggedIn, setisLoggedIn] = useState(false);
-  const [load, setload] = useState(false);
+  const [load, setload] = useState(true);
 
   async function onAuthStateChanged() {
     const user = await AsyncStorage.getItem('accessTokens');
@@ -42,10 +42,9 @@ const AppNavigator = () => {
 
   return (
     // <SafeAreaView>
-    <NavigationContainer>
-      {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
-    </NavigationContainer>
-
+      <NavigationContainer>
+        {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
     // </SafeAreaView>
   );
 };

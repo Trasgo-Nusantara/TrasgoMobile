@@ -44,7 +44,7 @@ const TrasrideScreen = ({ navigation }) => {
     ]);
 
     const [listPlace2, setlistPlace2] = useState([
-        { label: 'Tujuan Kamu', value: '1', latitude: 0, longitude: 0 },
+        { label: 'Cari Tujuan Kamu', value: '1', latitude: 0, longitude: 0 },
     ]);
 
     const [selectedValueTitleOrigin, setselectedValueTitleOrigin] = useState('');

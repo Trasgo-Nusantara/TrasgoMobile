@@ -81,22 +81,20 @@ const LoginScreen = ({ navigation }) => {
   }
 
 
-
   return (
     <View style={COMPONENT_STYLES.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
-
-        <View style={{ flexDirection: 'row' }}>
+        {/* <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }} />
           <DropdownLanguangeComponent
             // label={t('loginScreen.placeholderEmail')}
             items={languageItems}
-            value={languageItems.find((e) => e.value === selectedLanguage).label}
+            value={languageItems.find((e) => e.value === selectedLanguage)?.label}
             iconName={"caret-down-outline"}
             onValueChange={setSelectedLanguage}
           />
-        </View>
+        </View> */}
         <View style={{ alignItems: 'center' }}>
           <Image source={require('../../assets/logo2.png')} style={{ width: 200, height: 200 }} />
           <Image source={require('../../assets/opening.png')} style={{ width: width - 150, height: 240 }} />
