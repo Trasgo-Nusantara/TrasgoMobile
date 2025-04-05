@@ -1,11 +1,9 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Motion } from "@legendapp/motion"
-import { COMPONENT_STYLES } from "../../../../lib/constants"
+import { COLORS, COMPONENT_STYLES } from "../../../../lib/constants"
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
-import DropdownSearchComponent from "../../../../component/DropdownSearchComponent";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import RadioButtonChoiceGroup from '../../../../component/RadioButtonChoiceComponent';
-import { ButtonComponent } from "../../../../component/ButtonComponent";
 
 
 const ModalRideComponent = ({
@@ -13,10 +11,14 @@ const ModalRideComponent = ({
     setmodalRideShow,
     options,
     selectedValue,
-    setSelectedValue
+    setSelectedValue,
+    regular,
+    hemat,
+    premium
 }) => {
 
     const { t } = useTranslation();
+    const [choice, setchoice] = useState("regular")
 
     useEffect(() => {
         if (modalRideShow) {
@@ -74,20 +76,56 @@ const ModalRideComponent = ({
                 <View style={{ alignItems: 'center', margin: 10 }}>
                     <View style={{ width: 50, height: 3, backgroundColor: '#00000050' }} />
                 </View>
-                <View style={{flexDirection:'row', justifyContent:"center", alignItems:"center"}}>
-                    <TouchableOpacity>
-                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Mobil</Text>
+                <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => setchoice('regular')}>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Trasgo</Text>
+                        {choice === 'regular' &&
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={{ width: 50, height: 3, backgroundColor: COLORS.primary }} />
+                            </View>
+                        }
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Motor</Text>
+                    <View style={{ width: 5, height: 5, backgroundColor: COLORS.primary, borderRadius: 100, marginHorizontal: 10 }} />
+                    <TouchableOpacity onPress={() => setchoice('hemat')}>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Hemat</Text>
+                        {choice === 'hemat' &&
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={{ width: 50, height: 3, backgroundColor: COLORS.primary }} />
+                            </View>
+                        }
+                    </TouchableOpacity>
+                    <View style={{ width: 5, height: 5, backgroundColor: COLORS.primary, borderRadius: 100, marginHorizontal: 10 }} />
+                    <TouchableOpacity onPress={() => setchoice('premium')}>
+                        <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600', textAlign: 'center' }]}>Periority</Text>
+                        {choice === 'premium' &&
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={{ width: 50, height: 3, backgroundColor: COLORS.primary }} />
+                            </View>
+                        }
                     </TouchableOpacity>
                 </View>
                 <View style={COMPONENT_STYLES.spacer} />
-                <RadioButtonChoiceGroup
-                    options={options}
-                    selectedValue={selectedValue}
-                    onSelect={handleSelect}
-                />
+                {choice === 'regular' &&
+                    <RadioButtonChoiceGroup
+                        options={regular}
+                        selectedValue={selectedValue}
+                        onSelect={handleSelect}
+                    />
+                }
+                {choice === 'hemat' &&
+                    <RadioButtonChoiceGroup
+                        options={hemat}
+                        selectedValue={selectedValue}
+                        onSelect={handleSelect}
+                    />
+                }
+                {choice === 'premium' &&
+                    <RadioButtonChoiceGroup
+                        options={premium}
+                        selectedValue={selectedValue}
+                        onSelect={handleSelect}
+                    />
+                }
             </View>
         </Motion.View>
     )
@@ -108,7 +146,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         paddingHorizontal: 20,
-        paddingBottom: 20
+        paddingBottom: 20,
+        height: 550,
     },
 });
 

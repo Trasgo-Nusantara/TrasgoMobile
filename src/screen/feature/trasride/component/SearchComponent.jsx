@@ -22,7 +22,12 @@ const ModalSearch = ({
     setlocationStatus,
     setfocus,
     buttonOrigin,
-    buttonDestination
+    buttonDestination,
+
+    selectedValueTitleOrigin,
+    setselectedValueTitleOrigin,
+    selectedValueTitleDes,
+    setselectedValueTitleDes
 }) => {
 
     useEffect(() => {
@@ -48,22 +53,27 @@ const ModalSearch = ({
             <View style={styles.modalComponentTop} >
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={COMPONENT_STYLES.spacer} />
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ flex: 1 }}>
-                        <DropdownSearchComponent
-                            trigger={(a) => buttonOrigin(a)}
-                            items={listPlace}
-                            value={originChoice}
-                            iconNameDes={"caret-up-circle-outline"}
-                            iconName={"locate-outline"}
-                            setsearchLocationonMapMode={setsearchLocationonMapMode}
-                            setfocus={setfocus}
-                            focus={'origin'}
-                            onValueChange={setoriginChoice}
-                            setlocationStatus={setlocationStatus}
-                        />
+                {selectedValueTitleDes !== '' &&
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ flex: 1 }}>
+                            <DropdownSearchComponent
+                                trigger={(a) => buttonOrigin(a)}
+                                items={listPlace}
+                                value={originChoice}
+                                iconNameDes={"caret-up-circle-outline"}
+                                iconName={"locate-outline"}
+                                setsearchLocationonMapMode={setsearchLocationonMapMode}
+                                setfocus={setfocus}
+                                focus={'origin'}
+                                onValueChange={setoriginChoice}
+                                setlocationStatus={setlocationStatus}
+
+                                selectedValue={selectedValueTitleOrigin} 
+                                setselectedValue={setselectedValueTitleOrigin}
+                            />
+                        </View>
                     </View>
-                </View>
+                }
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
@@ -77,6 +87,9 @@ const ModalSearch = ({
                             focus={'destination'}
                             onValueChange={setdestinationChoice}
                             setlocationStatus={setlocationStatus}
+
+                            selectedValue={selectedValueTitleDes} 
+                            setselectedValue={setselectedValueTitleDes}
                         />
                     </View>
                 </View>
@@ -108,7 +121,7 @@ const ModalSearchView = ({
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ flex: 1, flexDirection:'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
                         <Ionicons name={"locate-outline"} size={24} color={COLORS.text} />
                         <View style={COMPONENT_STYLES.spacer} />
                         <Text style={styles.dropdownText} numberOfLines={2} ellipsizeMode="tail">
@@ -119,7 +132,7 @@ const ModalSearchView = ({
                 </View>
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ flex: 1, flexDirection:'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
                         <Ionicons name={"location-outline"} size={24} color={COLORS.text} />
                         <View style={COMPONENT_STYLES.spacer} />
                         <Text style={styles.dropdownText} numberOfLines={2} ellipsizeMode="tail">

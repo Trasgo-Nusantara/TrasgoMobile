@@ -34,7 +34,10 @@ const TrasrideScreen = ({ navigation }) => {
         longitude: 106.71610817076616,
     });
 
-    const [options, setoptions] = useState([])
+    const [regular, setregular] = useState([])
+    const [hemat, sethemat] = useState([])
+    const [premium, setpremium] = useState([])
+
 
     const [listPlace, setlistPlace] = useState([
         { label: 'Lokasi Kamu', value: '1', latitude: 0, longitude: 0 },
@@ -44,6 +47,9 @@ const TrasrideScreen = ({ navigation }) => {
         { label: 'Tujuan Kamu', value: '1', latitude: 0, longitude: 0 },
     ]);
 
+    const [selectedValueTitleOrigin, setselectedValueTitleOrigin] = useState('');
+    const [selectedValueTitleDes, setselectedValueTitleDes] = useState('');
+    
     const [originChoice, setoriginChoice] = useState({
         label: 'Lokasi Kamu',
         value: '1',
@@ -51,14 +57,14 @@ const TrasrideScreen = ({ navigation }) => {
         longitude: pickupLocation.longitude
     });
     const [destinationChoice, setdestinationChoice] = useState({
-        label: 'Tujuan Kamu',
+        label: 'Cari Tujuan Kamu',
         value: '1',
         latitude: pickupLocation.latitude,
         longitude: pickupLocation.longitude
     });
     const [coordinates, setCoordinates] = useState([]);
 
-    const [selectedValue, setSelectedValue] = useState([options[0]]);
+    const [selectedValue, setSelectedValue] = useState([regular[0]]);
     const [rideModal, setrideModal] = useState(true);
 
     const [modalSearchBarShow, setmodalSearchBarShow] = useState(true);
@@ -186,7 +192,9 @@ const TrasrideScreen = ({ navigation }) => {
                 try {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
-                    setoptions(responseFinal.listLayanan)
+                    setregular(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === false))
+                    sethemat(responseFinal.listLayanan.filter((item) => item.isHemat === true && item.isPremium === false))
+                    setpremium(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === true))
                     setdestinationChoice({ label: responseFinal.tujuan })
                     setoriginChoice({ label: responseFinal.asal })
                     setSelectedValue("")
@@ -226,7 +234,9 @@ const TrasrideScreen = ({ navigation }) => {
                 try {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
-                    setoptions(responseFinal.listLayanan)
+                    setregular(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === false))
+                    sethemat(responseFinal.listLayanan.filter((item) => item.isHemat === true && item.isPremium === false))
+                    setpremium(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === true))
                     setdestinationChoice({ label: responseFinal.tujuan })
                     setoriginChoice({ label: responseFinal.asal })
                     setSelectedValue("")
@@ -246,7 +256,7 @@ const TrasrideScreen = ({ navigation }) => {
         Geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                setPickupLocation({ latitude, longitude });
+                setPickupLocation({ latitude, longitude }); 
             },
             (error) => {
                 console.log("Error getting location", error);
@@ -299,7 +309,9 @@ const TrasrideScreen = ({ navigation }) => {
                     }
                 </MapView>
             ) : (
-                <Text>Memuat lokasi...</Text>
+                <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>Memuat lokasi...</Text>
+                </View>
             )}
             {searchLocationonMapMode && (
                 <View style={styles.centerCircle} />
@@ -354,6 +366,11 @@ const TrasrideScreen = ({ navigation }) => {
                     setfocus={setfocus}
                     setlocationStatus={setlocationStatus}
                     navigation={() => navigation.goBack()}
+
+                    selectedValueTitleOrigin= {selectedValueTitleOrigin}
+                    setselectedValueTitleOrigin={setselectedValueTitleOrigin}
+                    selectedValueTitleDes={selectedValueTitleDes}
+                    setselectedValueTitleDes={setselectedValueTitleDes}
                 />
             }
             {searchLocationonMapMode &&
@@ -371,8 +388,14 @@ const TrasrideScreen = ({ navigation }) => {
                                     };
 
                                     const responseFinal = await postData('maps/getDirections', formData2);
+                                    
+                                    setselectedValueTitleOrigin(responseFinal.asal)
+                                    setselectedValueTitleDes(responseFinal.tujuan)
+
                                     setCoordinates(responseFinal.coordinate)
-                                    setoptions(responseFinal.listLayanan)
+                                    setregular(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === false))
+                                    sethemat(responseFinal.listLayanan.filter((item) => item.isHemat === true && item.isPremium === false))
+                                    setpremium(responseFinal.listLayanan.filter((item) => item.isHemat === false && item.isPremium === true))
                                     setSelectedValue("")
                                     setsearchLocationonMapMode(false)
                                     setlocationStatus(true)
@@ -392,7 +415,9 @@ const TrasrideScreen = ({ navigation }) => {
                         <ModalRideComponent
                             modalRideShow={modalRideShow}
                             setmodalRideShow={setmodalRideShow}
-                            options={options}
+                            regular={regular}
+                            hemat={hemat}
+                            premium={premium}
                             selectedValue={selectedValue}
                             setSelectedValue={setSelectedValue}
                         />

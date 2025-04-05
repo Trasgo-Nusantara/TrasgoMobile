@@ -8,10 +8,23 @@ import { ButtonComponent } from './ButtonComponent';
 
 const { width, height } = Dimensions.get('window');
 
-const DropdownSearchComponent = ({ setlocationStatus, focus, setfocus, setsearchLocationonMapMode, trigger, label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
+const DropdownSearchComponent = ({ 
+  setlocationStatus, 
+  focus, 
+  setfocus, 
+  setsearchLocationonMapMode, 
+  trigger, 
+  label, 
+  items, 
+  value, 
+  onValueChange, 
+  placeholder, 
+  iconName, 
+  iconNameDes, 
+  style, selectedValue, setselectedValue,
+  ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedValue, setselectedValue] = useState('');
   const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(null);
