@@ -21,8 +21,8 @@ const TrasrideScreen = ({ navigation }) => {
     const mapRef = useRef(null);
 
     const [pickupLocation, setPickupLocation] = useState({
-        latitude: null,
-        longitude: null,
+        latitude: 0,
+        longitude: 0,
     });
 
     const [destinationLocation, setDestinationLocation] = useState({
@@ -253,66 +253,60 @@ const TrasrideScreen = ({ navigation }) => {
     };
 
     useEffect(() => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setPickupLocation({ latitude, longitude }); 
-            },
-            (error) => {
-                console.log("Error getting location", error);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
+        // Geolocation.getCurrentPosition(
+        //     (position) => {
+        //         const { latitude, longitude } = position.coords;
+        //         setPickupLocation({ latitude, longitude }); 
+        //     },
+        //     (error) => {
+        //         console.log("Error getting location", error);
+        //     },
+        //     { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        // );
     }, []);
 
     return (
         <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
             <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-            {pickupLocation && pickupLocation.latitude && pickupLocation.longitude ? (
-                <MapView
-                    ref={mapRef}
-                    // provider={PROVIDER_GOOGLE}
-                    style={styles.map}
-                    region={{
-                        latitude: pickupLocation.latitude,
-                        longitude: pickupLocation.longitude,
-                        latitudeDelta: 0.015,
-                        longitudeDelta: 0.0121,
-                    }}
-                    onUserLocationChange={handleUserLocationChange}
-                    onRegionChangeComplete={(data) => {
-                        if (searchLocationonMapMode) {
-                            if (focus === "origin") {
-                                setPickupLocation({
-                                    latitude: data.latitude,
-                                    longitude: data.longitude,
-                                })
-                            } else {
-                                setDestinationLocation({
-                                    latitude: data.latitude,
-                                    longitude: data.longitude,
-                                })
-                            }
+            <MapView
+                ref={mapRef}
+                // provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                region={{
+                    latitude: pickupLocation.latitude,
+                    longitude: pickupLocation.longitude,
+                    latitudeDelta: 0.015,
+                    longitudeDelta: 0.0121,
+                }}
+                onUserLocationChange={handleUserLocationChange}
+                onRegionChangeComplete={(data) => {
+                    if (searchLocationonMapMode) {
+                        if (focus === "origin") {
+                            setPickupLocation({
+                                latitude: data.latitude,
+                                longitude: data.longitude,
+                            })
+                        } else {
+                            setDestinationLocation({
+                                latitude: data.latitude,
+                                longitude: data.longitude,
+                            })
                         }
-                    }}
-                    // onPress={handleMapPress}
-                    showsUserLocation={true}
-                >
-                    <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
-                    <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
-                    <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
-                    {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
-                        <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
                     }
-                    {findDriver &&
-                        <Marker coordinate={driverLocation} pinColor='blue' title='Driver' />
-                    }
-                </MapView>
-            ) : (
-                <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text>Memuat lokasi...</Text>
-                </View>
-            )}
+                }}
+                // onPress={handleMapPress}
+                showsUserLocation={true}
+            >
+                <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
+                <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
+                <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
+                {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
+                    <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
+                }
+                {findDriver &&
+                    <Marker coordinate={driverLocation} pinColor='blue' title='Driver' />
+                }
+            </MapView>
             {searchLocationonMapMode && (
                 <View style={styles.centerCircle} />
             )}
