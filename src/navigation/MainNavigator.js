@@ -20,6 +20,7 @@ import ModalNotifikasi from '../component/ModalNotifikasi';
 import messaging from '@react-native-firebase/messaging';
 import DetailOrder from '../screen/feature/trasride/DetailOrder';
 import { getData } from '../api/service';
+import DetailFoodScreen from '../screen/feature/trasfood/DetailFoodScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -200,6 +201,23 @@ const HomeStack = () => {
               <View>
                 <Ionicons name="chevron-back-outline" size={24} color="black" style={{ marginRight: 20 }} />
               </View>
+            ),
+          })} />
+        <Stack.Screen
+          name="DetailFood"
+          component={DetailFoodScreen}
+          options={({ navigation }) => ({
+            title: 'Detail Food',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
             ),
           })} />
       </Stack.Navigator></>
